@@ -210,3 +210,75 @@ add(o, 2.78, highpass(whoosh(0.9, 400, 3500, 1.0), 300), -0.2, 0.16)
 for i, f in enumerate((A4, D5, FS5)):
     add(o, 3.45 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.14)
 finish(o, 0.02, 4.4, "ident/assets/audio/ident.wav")
+
+# ---------------- TRE ALTERNATIVE EPICHE: TUFFO, SCIAME, NASTRO ----------------
+def big_hit(o, t0, gain=1.0):
+    """Il colpo: basso profondo, accordo largo, aria."""
+    add(o, t0, impact(2.4), 0, 0.95 * gain)
+    add(o, t0, chord([D2, A2, D3, A3, D4, FS4, A4, E5], 3.4), 0, 0.9 * gain)
+    add(o, t0, highpass(lowpass(rng.standard_normal(SR), 7000), 1800) * np.exp(-tt(1) * 8), 0, 0.3 * gain)
+    for i, f in enumerate((D5, A5, FS5 * 2)):
+        add(o, t0 + 0.02 * i, bell(f, 2.4, 0.4), (-0.5, 0.5, 0)[i], 0.07 * gain)
+
+
+def swell(d, freqs, power=2.0):
+    t = tt(d)
+    s = sum(np.sin(2 * np.pi * f * t + i) + 0.3 * np.sin(4 * np.pi * f * t) for i, f in enumerate(freqs)) / len(freqs)
+    return s * (t / d) ** power
+
+
+# TUFFO: ta (il logo si compone) ... respiro ... tuffo ... atterraggio
+o = buf(5.5)
+t = tt(0.6)
+add(o, 0.42, np.sin(2 * np.pi * np.cumsum(60 + 70 * np.exp(-t * 16)) / SR) * np.exp(-t * 6), 0, 0.75)
+add(o, 0.42, chord([D3, A3, D4, FS4], 1.2), 0, 0.4)
+for tn, f, pan in ((0.55, D5, 0), (0.6, FS5, -0.3), (0.65, A5, 0.3), (0.7, D6, 0.1), (0.75, E5 * 2, -0.2), (0.8, FS5 * 2, 0.2)):
+    add(o, tn, pluck(f, 0.7), pan, 0.13)
+add(o, 1.2, swell(0.62, (D3, A3, D4), 2.5), 0, 0.3)  # rincorsa
+add(o, 1.3, highpass(whoosh(0.55, 300, 5000), 250), 0, 0.3)
+add(o, 1.82, highpass(whoosh(0.8, 200, 9000, 1.3), 120), 0, 0.85)  # tuffo
+add(o, 1.82, riser(0.7, 60, 520), 0, 0.3)
+t = tt(0.9)
+add(o, 2.42, np.sin(2 * np.pi * np.cumsum(120 * np.exp(-t * 4) + 34) / SR) * np.exp(-t * 3), 0, 0.7)  # dentro il blu
+for k in range(11):  # le reti che passano
+    add(o, 2.45 + 0.085 * k ** 1.15, highpass(whoosh(0.3, 600, 5000, 1.0), 400), (-0.8, 0.8)[k % 2], 0.2 - 0.012 * k)
+big_hit(o, 3.32, 0.95)  # atterraggio sul logo esteso
+finish(o, 0.02, 4.9, "tuffo/assets/audio/tuffo.wav")
+
+# SCIAME: tanti piccoli tocchi, il vortice che accelera, il colpo quando diventano uno
+o = buf(5.5)
+for k in range(140):
+    add(o, 0.1 + 0.8 * rng.random(), tick(rng.choice([D5, FS5, A5, D6, E5 * 2]) * rng.choice([1, 2]), 0.1), rng.uniform(-0.9, 0.9), 0.05)
+add(o, 1.1, highpass(whoosh(1.75, 200, 8000, 2.2), 150), 0, 0.75)
+add(o, 1.3, riser(1.52, 73, 587), 0, 0.26)
+add(o, 1.1, swell(1.72, (D3, A3, D4, FS4), 2.2), 0, 0.3)
+for k in range(110):  # i punti che arrivano, sempre più fitti
+    u = (k / 110) ** 0.55
+    add(o, 1.5 + 1.3 * u, tick(1400 + 2600 * u + rng.uniform(-200, 200), 0.05), rng.uniform(-0.8, 0.8), 0.03 + 0.03 * u)
+big_hit(o, 2.82, 1.0)
+for tn, f, pan in ((2.95, D5, 0), (2.99, FS5, -0.3), (3.03, A5, 0.3), (3.07, D6, 0.1), (3.11, E5 * 2, -0.2), (3.15, FS5 * 2, 0.2)):
+    add(o, tn, pluck(f, 0.7), pan, 0.11)
+add(o, 3.7, highpass(whoosh(0.8, 400, 3000, 1.0), 300), 0, 0.12)
+for i, f in enumerate((A4, D5, FS5)):
+    add(o, 4.25 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.13)
+finish(o, 0.02, 4.9, "sciame/assets/audio/sciame.wav")
+
+# NASTRO: aria che entra, il nastro che si avvolge e sale di tono, il blu che si richiude
+o = buf(5.5)
+add(o, 0.1, highpass(whoosh(1.2, 300, 6000, 1.1), 250), -0.3, 0.4)
+t = tt(3.0)
+pad = sum(np.sin(2 * np.pi * f * t + i) for i, f in enumerate((D3, A3, D4, FS4, A4))) / 5
+add(o, 0.1, pad * np.minimum(1, t / 1.2) * np.where(t < 2.75, 1, np.exp(-(t - 2.75) * 9)), 0, 0.26)
+add(o, 1.55, highpass(whoosh(1.32, 250, 9000, 2.4), 180), 0, 0.7)
+add(o, 1.6, riser(1.25, 110, 880), 0, 0.26)
+for k in range(26):  # il giro che accelera
+    u = k / 26
+    add(o, 1.6 + 1.2 * u ** 0.7, tick(900 + 1800 * u, 0.07), np.sin(k * 1.3) * 0.8, 0.03 + 0.04 * u)
+big_hit(o, 2.85, 1.0)
+add(o, 2.85, highpass(whoosh(0.6, 3000, 400, 0.6), 200), 0, 0.3)
+for tn, f, pan in ((3.06, D5, 0), (3.1, FS5, -0.3), (3.14, A5, 0.3), (3.18, D6, 0.1), (3.22, E5 * 2, -0.2), (3.26, FS5 * 2, 0.2)):
+    add(o, tn, pluck(f, 0.7), pan, 0.11)
+add(o, 3.86, highpass(whoosh(0.9, 400, 3500, 1.0), 300), -0.2, 0.15)
+for i, f in enumerate((A4, D5, FS5)):
+    add(o, 4.5 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.13)
+finish(o, 0.05, 4.9, "nastro/assets/audio/nastro.wav")

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/logo-paths.js"></script>
+    <script src="assets/brand-assets.js"></script>
+    <script src="assets/pn-core.js"></script>
+    <script src="assets/pn-brand.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #1055ad;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #1055ad;
+      }
+      #stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="4.8"
+      data-fps="60"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Tutta l'animazione è disegnata qui da assets/scena.js, in funzione del tempo -->
+      <canvas
+        id="stage"
+        class="clip"
+        data-start="0"
+        data-duration="4.8"
+        data-track-index="0"
+        data-layout-ignore
+        width="1920"
+        height="1080"
+        style="z-index: 1"
+      ></canvas>
+      <audio
+        id="suono"
+        class="clip"
+        data-start="0"
+        data-duration="4.8"
+        data-track-index="1"
+        data-volume="1"
+        src="assets/audio/risposta.wav"
+      ></audio>
+    </div>
+    <script src="assets/scena.js"></script>
+    <script>
+      window.addEventListener("hf-seek", (e) => window.PN_RENDER(e.detail.time));
+      window.PN_RENDER(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

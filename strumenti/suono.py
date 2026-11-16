@@ -302,3 +302,24 @@ add(o, 2.2, highpass(whoosh(0.9, 6000, 500, 0.7), 200), 0, 0.3)
 for i, f in enumerate((A4, D5, FS5)):
     add(o, 3.2 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.14)
 finish(o, 0.02, 4.2, "filo/assets/audio/filo.wav")
+
+# ---------------- RISPOSTA: l'attesa del "sta scrivendo…", poi la risposta che arriva ----------------
+o = buf(4.8)
+t = tt(4.8)
+add(o, 0, (np.sin(2 * np.pi * D2 * t) + 0.5 * np.sin(2 * np.pi * A2 * t)) * np.clip(t / 1.38, 0, 1) ** 2 * (t < 1.38), 0, 0.22)  # tensione che cresce
+for cyc in range(2):  # i tre puntini, due giri: sempre le stesse tre note, sospese
+    for j, f in enumerate((A4, B4, D5)):
+        add(o, 0.3 + cyc * 0.54 + j * 0.13 + 0.06, pluck(f * (1 if cyc == 0 else 1.0), 0.5), (-0.35, 0, 0.35)[j], 0.2 + 0.05 * cyc)
+add(o, 1.2, highpass(whoosh(0.2, 800, 5000, 1.0), 500), 0, 0.2)
+big_hit(o, 1.38, 1.0)  # la risposta
+add(o, 1.38, highpass(whoosh(0.7, 7000, 400, 0.6), 200), 0, 0.35)
+for tn, f, pan in ((2.08, D5, 0), (2.2, FS5, -0.3), (2.25, A5, 0.3), (2.36, D6, 0.1)):
+    add(o, tn, pluck(f, 0.7), pan, 0.12)
+for line, t0 in enumerate((2.38, 2.42, 2.46, 2.5)):
+    for k in range((13, 14, 21, 10)[line]):
+        add(o, t0 + k * 0.009, tick(1800 + 50 * k, 0.05), -0.3 + 0.2 * line, 0.018)
+add(o, 2.56, pluck(D5, 1.2), 0, 0.13)
+add(o, 3.0, highpass(whoosh(0.9, 400, 3500, 1.0), 300), -0.2, 0.15)
+for i, f in enumerate((A4, D5, FS5)):
+    add(o, 3.65 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.13)
+finish(o, 0.02, 4.3, "risposta/assets/audio/risposta.wav")

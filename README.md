@@ -44,14 +44,15 @@ python3 strumenti/suono.py
 
 ## Icone di caricamento
 
-In `loader/`: 24 icone in loop fatte con i pezzi del logo (nodi, linee, pallini, anello, disco).
+In `loader/`: 12 icone in loop. Il logo intero è troppo fitto per un'icona, quindi usano un segno ridotto
+preso dalla sua parte bassa: tre nodi di grandezza diversa, due linee piene e una a pallini.
 
 | File | Cosa contiene |
 |---|---|
-| `loader/anteprima.html` | la pagina con tutte le icone dal vivo, in tre combinazioni di colore; si apre da sola nel browser |
+| `loader/anteprima.html` | la pagina con tutte le icone dal vivo a 96, 48 e 24 px, in tre combinazioni di colore; si apre da sola nel browser |
 | `loader/assets/pn-loaders.js` | i disegni delle icone |
 | `loader/assets/pn-loaders-start.js` | la funzione che ne avvia una su un `<canvas>` |
-| `video/polinetwork-loader.mp4` | la griglia delle 24 icone, due giri completi |
+| `video/polinetwork-loader.mp4` | la griglia delle 12 icone, ognuna anche a 28 px, due giri completi |
 
 Per usarne una in una pagina:
 
@@ -60,7 +61,7 @@ Per usarne una in una pagina:
 <script src="pn-loaders.js"></script>
 <script src="pn-loaders-start.js"></script>
 <script>
-  PNLoaders.start(document.getElementById("c"), "impulso", { fg: "#1055AD", bg: "#f1f5f9" });
+  PNLoaders.start(document.getElementById("c"), "costruzione", { fg: "#1055AD", bg: "#f1f5f9" });
 </script>
 ```
 

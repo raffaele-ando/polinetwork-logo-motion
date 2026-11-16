@@ -44,7 +44,7 @@
       data-width="1920"
       data-height="1080"
     >
-      <!-- La griglia delle 24 icone, disegnata da assets/pn-loaders.js: due giri completi -->
+      <!-- La griglia delle 12 icone, ognuna anche in piccolo, disegnata da assets/pn-loaders.js: due giri completi -->
       <canvas
         id="stage"
         class="clip"
@@ -60,10 +60,11 @@
     <script>
       (function () {
         const ctx = document.getElementById("stage").getContext("2d");
-        const COLS = 6,
-          ROWS = 4,
+        const COLS = 4,
+          ROWS = 3,
           PERIOD = 2.4,
-          SIZE = 176;
+          SIZE = 210, // l'icona grande
+          SMALL = 28; // la stessa icona in piccolo, accanto: deve leggersi anche così
         const cw = 1920 / COLS,
           ch = 1080 / ROWS;
         function render(t) {
@@ -71,8 +72,12 @@
           ctx.fillStyle = "#f1f5f9";
           ctx.fillRect(0, 0, 1920, 1080);
           PNLoaders.list.forEach((l, k) => {
-            ctx.setTransform(1, 0, 0, 1, (k % COLS) * cw + cw / 2, Math.floor(k / COLS) * ch + ch / 2);
+            const x = (k % COLS) * cw + cw / 2,
+              y = Math.floor(k / COLS) * ch + ch / 2;
+            ctx.setTransform(1, 0, 0, 1, x - 30, y);
             PNLoaders.draw(ctx, l.id, t / PERIOD, SIZE);
+            ctx.setTransform(1, 0, 0, 1, x + 150, y + 78);
+            PNLoaders.draw(ctx, l.id, t / PERIOD, SMALL);
           });
         }
         window.addEventListener("hf-seek", (e) => render(e.detail.time));

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/pn-loaders.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f1f5f9;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f1f5f9;
+      }
+      #stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="4.8"
+      data-fps="60"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- La griglia delle 24 icone, disegnata da assets/pn-loaders.js: due giri completi -->
+      <canvas
+        id="stage"
+        class="clip"
+        data-start="0"
+        data-duration="4.8"
+        data-track-index="0"
+        data-layout-ignore
+        width="1920"
+        height="1080"
+        style="z-index: 1"
+      ></canvas>
+    </div>
+    <script>
+      (function () {
+        const ctx = document.getElementById("stage").getContext("2d");
+        const COLS = 6,
+          ROWS = 4,
+          PERIOD = 2.4,
+          SIZE = 176;
+        const cw = 1920 / COLS,
+          ch = 1080 / ROWS;
+        function render(t) {
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.fillStyle = "#f1f5f9";
+          ctx.fillRect(0, 0, 1920, 1080);
+          PNLoaders.list.forEach((l, k) => {
+            ctx.setTransform(1, 0, 0, 1, (k % COLS) * cw + cw / 2, Math.floor(k / COLS) * ch + ch / 2);
+            PNLoaders.draw(ctx, l.id, t / PERIOD, SIZE);
+          });
+        }
+        window.addEventListener("hf-seek", (e) => render(e.detail.time));
+        render(0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = gsap.timeline({ paused: true });
+      })();
+    </script>
+  </body>
+</html>

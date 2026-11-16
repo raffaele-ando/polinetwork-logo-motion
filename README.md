@@ -41,3 +41,27 @@ cambiali anche lì e rigeneralo:
 ```bash
 python3 strumenti/suono.py
 ```
+
+## Icone di caricamento
+
+In `loader/`: 24 icone in loop fatte con i pezzi del logo (nodi, linee, pallini, anello, disco).
+
+| File | Cosa contiene |
+|---|---|
+| `loader/anteprima.html` | la pagina con tutte le icone dal vivo, in tre combinazioni di colore; si apre da sola nel browser |
+| `loader/assets/pn-loaders.js` | i disegni delle icone |
+| `loader/assets/pn-loaders-start.js` | la funzione che ne avvia una su un `<canvas>` |
+| `video/polinetwork-loader.mp4` | la griglia delle 24 icone, due giri completi |
+
+Per usarne una in una pagina:
+
+```html
+<canvas id="c" width="96" height="96"></canvas>
+<script src="pn-loaders.js"></script>
+<script src="pn-loaders-start.js"></script>
+<script>
+  PNLoaders.start(document.getElementById("c"), "impulso", { fg: "#1055AD", bg: "#f1f5f9" });
+</script>
+```
+
+Se cambi `pn-loaders.js`, la copia dentro `anteprima.html` va aggiornata a mano: la pagina contiene il codice al suo interno, per poterla aprire da sola.

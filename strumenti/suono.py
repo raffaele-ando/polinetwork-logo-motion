@@ -282,3 +282,23 @@ add(o, 3.86, highpass(whoosh(0.9, 400, 3500, 1.0), 300), -0.2, 0.15)
 for i, f in enumerate((A4, D5, FS5)):
     add(o, 4.5 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.13)
 finish(o, 0.05, 4.9, "nastro/assets/audio/nastro.wav")
+
+# ---------------- FILO: ta-dum, si entra nella linea, i fili, il fondo che si apre ----------------
+o = buf(4.8)
+t = tt(1.4)
+for t0, f0, g in ((0.18, 58, 0.9), (0.5, 46, 1.0)):  # due colpi
+    add(o, t0, np.sin(2 * np.pi * np.cumsum(f0 + 55 * np.exp(-t * 18)) / SR) * np.exp(-t * 3.2), 0, 0.8 * g)
+add(o, 0.18, chord([D3, A3, D4], 1.6), 0, 0.4)
+add(o, 0.5, chord([D2, A2, D3, FS4, A4], 2.2), 0, 0.55)
+add(o, 1.1, highpass(whoosh(1.3, 200, 9000, 2.0), 140), 0, 0.7)  # la camera entra
+add(o, 1.15, riser(1.2, 73, 587), 0, 0.26)
+add(o, 1.75, swell(0.9, (D4, FS4, A4, D5, E5), 1.6) * np.exp(-np.maximum(0, tt(0.9) - 0.7) * 20), 0, 0.3)  # i fili
+for k in range(19):
+    add(o, 1.85 + 0.03 * k, bell((D5, E5, FS5, A5, B4 * 2, D6)[k % 6], 1.2, 0.3), -0.8 + 1.6 * k / 18, 0.035)
+t = tt(3.0)  # il fondo si apre: un accordo largo, morbido
+warm = sum(np.sin(2 * np.pi * f * t + i) + 0.3 * np.sin(4 * np.pi * f * t) for i, f in enumerate((D2, A2, D3, A3, D4, FS4, A4))) / 7
+add(o, 2.25, warm * np.minimum(1, t / 0.12) * np.exp(-t * 1.3), 0, 0.85)
+add(o, 2.2, highpass(whoosh(0.9, 6000, 500, 0.7), 200), 0, 0.3)
+for i, f in enumerate((A4, D5, FS5)):
+    add(o, 3.2 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.14)
+finish(o, 0.02, 4.2, "filo/assets/audio/filo.wav")

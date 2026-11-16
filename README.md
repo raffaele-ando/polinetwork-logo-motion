@@ -2,12 +2,13 @@
 
 1920×1080 a 60 fps, con suono. I video pronti sono in `video/`.
 
-**Le versioni attuali sono `tuffo`, `sciame`, `nastro` e `ident`**: seguono il brand system del file Figma (pagina "style guidelines").
+**La più recente è `filo`; poi `tuffo`, `sciame`, `nastro` e `ident`**: seguono il brand system del file Figma (pagina "style guidelines").
 Fondo chiaro `#f1f5f9`, forme sfumate e looper presi dal Figma, logo esteso originale.
 `rete` e `orbita` sono le prime prove, scure, tenute come riferimento.
 
 | Versione | File | Durata | Idea |
 |---|---|---|---|
+| **Filo** | `video/polinetwork-filo.mp4` | 4,8 s | Il logo arriva secco; la camera entra nella sua linea lunga, che da vicino si apre in un fascio di fili: il looper. Il blu del disco si scioglie nelle forme sfumate e resta il logo esteso. Lo sfondo del brand è il logo visto da dentro. |
 | **Tuffo** | `video/polinetwork-tuffo.mp4` | 5,5 s | Il logo si compone in un colpo, la camera prende la rincorsa e ci si tuffa dentro: un tunnel di reti nel blu, fino al logo esteso bianco su fondo blu. |
 | **Sciame** | `video/polinetwork-sciame.mp4` | 5,5 s | Centinaia di punti riempiono lo schermo, un vortice li porta al centro e insieme diventano il disco del logo; dentro si accende la rete. |
 | **Nastro** | `video/polinetwork-nastro.mp4` | 5,5 s | Su fondo blu un nastro di curve del looper attraversa lo schermo e si avvolge nell'anello; il blu si richiude nel disco e resta il fondo chiaro. |
@@ -20,7 +21,7 @@ dell'ident stanno in `ident/assets/brand-assets.js`.
 
 ## Modificare
 
-Ogni cartella (`tuffo/`, `sciame/`, `nastro/`, `ident/`, `rete/`, `orbita/`) è un progetto [HyperFrames](https://hyperframes.heygen.com):
+Ogni cartella (`filo/`, `tuffo/`, `sciame/`, `nastro/`, `ident/`, `rete/`, `orbita/`) è un progetto [HyperFrames](https://hyperframes.heygen.com):
 l'animazione sta in `assets/scena.js` (in `index.html` per le versioni più vecchie). I tempi sono le costanti in cima allo script (`T_LOCK`, `H_ON`, …),
 il nome sotto al logo è la variabile `nome`.
 

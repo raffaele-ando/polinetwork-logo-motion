@@ -180,3 +180,33 @@ for line, t0 in enumerate((5.0, 5.1, 5.2, 5.32)):
 for i, f in enumerate((D5, A5, E5 * 2, D6)):
     add(o, 5.35 + i * 0.09, bell(f, 2.2, 0.5), (-0.6, 0.6, -0.2, 0.3)[i], 0.1)
 finish(o, 0.3, 7.6, "orbita/assets/audio/orbita.wav")
+
+# ---------------- IDENT (versione chiara, sul brand system) ----------------
+# Suono leggero: un tocco morbido per ogni nodo, niente colpi da cinema.
+def pluck(f, d=0.9):
+    t = tt(d)
+    s = np.sin(2 * np.pi * f * t) + 0.25 * np.sin(2 * np.pi * 2 * f * t) * np.exp(-t * 14)
+    return s * np.exp(-t * 7) * np.minimum(1, t / 0.006)
+
+
+o = buf(5)
+for tn, f, pan in ((0.22, D4, 0), (0.74, A4, -0.4), (0.82, FS4, 0.3), (1.16, B4, 0.1), (1.42, D5, -0.4), (1.5, E5, 0.4)):
+    add(o, tn, pluck(f), pan, 0.3)
+for a, b, t0, d in ((2, 0, .46, .34), (2, 1, .54, .34), (1, 5, .86, .38), (5, 4, 1.18, .3), (5, 3, 1.24, .32)):
+    add(o, t0, highpass(whoosh(d, 900, 5000, 1.2), 700), 0, 0.05)
+for line, t0 in enumerate((1.46, 1.54, 1.6, 1.7)):
+    for k in range((13, 14, 21, 10)[line]):
+        add(o, t0 + k * 0.02, tick(1800 + 50 * k, 0.05), -0.3 + 0.2 * line, 0.022)
+# il disco che si apre: un soffio e un accordo caldo e corto
+t = tt(0.7)
+thump = np.sin(2 * np.pi * np.cumsum(70 + 60 * np.exp(-t * 18)) / SR) * np.exp(-t * 7)
+add(o, 2.08, thump, 0, 0.5)
+t = tt(2.6)
+warm = sum(np.sin(2 * np.pi * f * t + i) + 0.3 * np.sin(4 * np.pi * f * t) for i, f in enumerate((D3, A3, D4, FS4, A4))) / 5
+add(o, 2.08, warm * np.minimum(1, t / 0.03) * np.exp(-t * 1.6), 0, 0.5)
+add(o, 2.3, pluck(D5, 1.2), 0, 0.14)
+# il logo che rotola, il nome che esce
+add(o, 2.78, highpass(whoosh(0.9, 400, 3500, 1.0), 300), -0.2, 0.16)
+for i, f in enumerate((A4, D5, FS5)):
+    add(o, 3.45 + i * 0.07, pluck(f, 1.4), (-0.3, 0, 0.3)[i], 0.14)
+finish(o, 0.02, 4.4, "ident/assets/audio/ident.wav")
